@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="card-body"><h5><strong class="header-text">Edit Product</strong></h5></div>
+            {{ include('./product/forms/product.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

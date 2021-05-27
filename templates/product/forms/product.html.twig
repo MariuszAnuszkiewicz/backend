@@ -1,0 +1,10 @@
+<div class="col-md-6 col mt-5">
+    {{ form_start(form, {'method': 'POST'}) }}
+    <input type="hidden" name="token" value="{{ csrf_token('product-item') }}"/>
+    <div class="form-control">
+        <div class="mb-3">
+            <strong>{{ form_widget(form) }}</strong>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>

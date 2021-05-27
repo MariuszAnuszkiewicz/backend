@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Products{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card-body"><h5><strong class="header-text">List of Products</strong></h5></div>
+        <table class="table table-striped">
+            <thead class="bg-dark">
+                <tr>
+                    <th class="text-center text-white">id</th>
+                    <th class="text-center text-white">Name</th>
+                    <th class="text-center text-white">Info</th>
+                    <th class="text-center text-white">Public Date</th>
+                    <th class="text-center text-white">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+                <tr>
+                    <td class="text-center">{{ product.id }}</td>
+                    <td class="text-center">{{ product.name }}</td>
+                    <td class="text-center">{{ product.info }}</td>
+                    <td class="text-center">{{ product.getPublicDate|date }}</td>
+                    <td class="text-center">
+                        <form method="POST" action="{{ path('product-edit', {'id': product.id}) }}">
+                            <button class="btn btn-success">Edit</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
