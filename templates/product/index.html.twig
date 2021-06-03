@@ -4,7 +4,19 @@
 
 {% block body %}
 <div class="container">
+    {% if errors is defined %}
+    <ul class="flash-style-warning">
+        {% for error in errors %}
+            <li>{{ error.message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     <div class="row justify-content-center">
+        <div class="col-3">
+            <div class="card-body"><h5><strong class="header-text">Price Filter</strong></h5></div>
+           {{ include('./product/forms/product.html.twig') }}
+        </div>
+        {% if products is not empty %}
         <div class="card-body"><h5><strong class="header-text">List of Products</strong></h5></div>
         <table class="table table-striped">
             <thead class="bg-dark">
@@ -13,6 +25,7 @@
                     <th class="text-center text-white">Name</th>
                     <th class="text-center text-white">Info</th>
                     <th class="text-center text-white">Public Date</th>
+                    <th class="text-center text-white">Price</th>
                     <th class="text-center text-white">Action</th>
                 </tr>
             </thead>
@@ -20,18 +33,48 @@
             {% for product in products %}
                 <tr>
                     <td class="text-center">{{ product.id }}</td>
-                    <td class="text-center">{{ product.name }}</td>
-                    <td class="text-center">{{ product.info }}</td>
-                    <td class="text-center">{{ product.getPublicDate|date }}</td>
+                    <td class="text-center">{{ product.name|length > 30 ? product.name|slice(0, 30) ~ ' ... '  : product.name }}</td>
+                    <td class="text-center">{{ product.info|length > 50 ? product.info|slice(0, 50) ~ ' ... '  : product.info }}</td>
+                    <td class="text-center">{{ product.getPublicDate|format_datetime('short', 'none') }}</td>
+                    <td class="text-center">{{ product.price|number_format(2) }}</td>
                     <td class="text-center">
-                        <form method="POST" action="{{ path('product-edit', {'id': product.id}) }}">
-                            <button class="btn btn-success">Edit</button>
-                        </form>
+                        <div class="col-4 d-inline-flex">
+                            <form method="GET" action="{{ path('product-show', {'id': product.id}) }}">
+                                <button class="btn btn-info"><i class="fas fa-eye"></i></button>
+                            </form>
+                        </div>
+                        <div class="col-4 d-inline-flex">
+                            <form method="POST" action="{{ path('product-edit', {'id': product.id}) }}">
+                                <button class="btn btn-success"><i class="fas fa-edit"></i></button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        {% endif %}
     </div>
 </div>
+    <style>
+        .flash-style-warning {
+            display: block;
+            position: absolute;
+            top: 320px;
+            left: 38.6%;
+            background-color: rgba(245, 34, 70, 0.3);
+            width: 350px;
+            height: 35px;
+            text-align: center;
+            border-radius: 7px;
+            list-style-type: none;
+        }
+
+        .flash-style-warning li {
+            position: relative;
+            padding-top: 5px;
+            padding-right: 25px;
+        }
+    </style>
 {% endblock %}
+

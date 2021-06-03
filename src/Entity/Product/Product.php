@@ -5,6 +5,7 @@ namespace App\Entity\Product;
 use App\Repository\Product\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -25,7 +26,7 @@ class Product
     private $name;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $info;
 
@@ -33,6 +34,13 @@ class Product
      * @ORM\Column(type="date")
      */
     private $public_date;
+
+    /**
+     * @ORM\Column(type="decimal", precision=7, scale=2)
+     * @Assert\NotBlank(message="The fields 'From' and 'To' can't be empty")
+     *
+     */
+    private $price;
 
 
 //    public function __construct()
@@ -77,6 +85,18 @@ class Product
     public function setPublicDate(\DateTimeInterface $public_date): self
     {
         $this->public_date = $public_date;
+
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }
