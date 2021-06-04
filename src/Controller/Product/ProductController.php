@@ -70,7 +70,6 @@ class ProductController extends AbstractController
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($product);
                     $entityManager->flush();
-
                     $this->addFlash('success', 'Product was add successfully.');
                     return $this->redirectToRoute('products-list');
                 }
