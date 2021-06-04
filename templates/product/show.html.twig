@@ -1,14 +1,12 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Product By Id{% endblock %}
-
 {% block body %}
     <div class="container">
         <div class="container col-md-10 mt-5">
-            <div class="card-body"><h5><strong class="header-text">My Single Product</strong></h5></div>
-            <div class="row text-center">
+            <div class="card-body"><h5><strong class="header-text">Single Product</strong></h5></div>
+            <div class="row text-center border">
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="mb-2">
+                    <div class="mb-2 mt-2">
                         <strong class="text-danger">Id:</strong>
                     </div>
                     <div class="form-group bg-light pt-2 pb-2">
@@ -17,7 +15,7 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="mb-2">
+                    <div class="mb-2 mt-2">
                         <strong class="text-danger">Name:</strong>
                     </div>
                     <div class="form-group bg-light pt-2 pb-2">
@@ -26,35 +24,33 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="mb-2">
+                    <div class="mb-2 mt-2">
                         <strong class="text-danger">Info:</strong>
                     </div>
                     <div class="form-group bg-light pt-2 pb-2">
-                        {{ product.info }}
+                        <p class="p-2">{{ product.info }}</p>
                     </div>
                 </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="mb-2">
+                    <div class="mb-2 mt-2">
                         <strong class="text-danger">Price:</strong>
                     </div>
-                    <div class="form-group bg-light pt-2 pb-2">
-                        {{ product.price|number_format(2) }}
+                    <div class="form-group bg-light">
+                        <p class="text-success fw-bolder">{{ product.price|number_format(2) ~ ' zł' }}</p>
                     </div>
                 </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="mb-2">
+                    <div class="mb-2 mt-2">
                         <strong class="text-danger">Public Date:</strong>
                     </div>
                     <div class="form-group bg-light pt-2 pb-2">
-                        {{ product.getPublicDate|date }}
+                        <p>{{ product.getPublicDate|date }}</p>
                     </div>
                 </div>
+                <div class="mb-3"></div>
             </div>
         </div>
     </div>
-    <style>
-
-    </style>
 {% endblock %}

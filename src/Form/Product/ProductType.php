@@ -18,17 +18,21 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'attr' => ['class' => 'mb-3']
+                'label_attr' => ['class' => 'mb-2'],
+                'attr' => ['class' => 'mb-2'],
             ])
             ->add('info', TextareaType::class, [
-                'attr' => ['class' => 'mb-3', 'rows' => '8']
+                'label_attr' => ['class' => 'mb-2'],
+                'attr' => ['class' => 'mb-2', 'rows' => '8']
             ])
             ->add('public_date', DateType::class, [
-                'attr' => ['class' => 'col-md-3 mb-3'],
+                'label_attr' => ['class' => 'mb-2'],
+                'attr' => ['class' => 'col-md-3 mb-2'],
                 'widget' => 'single_text',
             ])
             ->add('price', MoneyType::class, [
-                'attr' => ['class' => 'col-md-3 mb-3'],
+                'label_attr' => ['class' => 'mb-2'],
+                'attr' => ['class' => 'col-md-3 mb-2'],
                 'currency' => 'PLN'
             ])
             ->add('submit', SubmitType::class, [

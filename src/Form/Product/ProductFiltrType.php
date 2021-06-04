@@ -24,20 +24,22 @@ class ProductFiltrType extends AbstractType
             ->add('from', IntegerType::class, [
                 'mapped' => true,
                 'required' => false,
+                'label_attr' => ['class' => 'mb-1'],
                 'attr' => [
                     'min' => 1,
-                    'class' => 'mt-2'
+                    'class' => 'mt-2 mb-2',
                 ]
             ])
             ->add('to', IntegerType::class, [
                 'mapped' => true,
                 'required' => false,
+                'label_attr' => ['class' => 'mb-1'],
                 'attr' => [
                     'min' => 1,
                     'class' => 'mt-2'
                 ]
             ])
-            ->add('submit', SubmitType::class, [
+            ->add('filter', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-primary mt-3'],
             ])
         ;
