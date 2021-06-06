@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block title %}User By Id{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="container col-md-10 mt-5">
+            <div class="card-body"><h5><strong class="header-text">Single User</strong></h5></div>
+            <div class="row text-center border">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="mb-2 mt-2">
+                        <strong class="text-danger">Id:</strong>
+                    </div>
+                    <div class="form-group bg-light pt-2 pb-2">
+                        <strong>{{ user.id }}</strong>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="mb-2 mt-2">
+                        <strong class="text-danger">Login:</strong>
+                    </div>
+                    <div class="form-group bg-light pt-2 pb-2">
+                        <strong>{{ user.login }}</strong>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="mb-2 mt-2">
+                        <strong class="text-danger">State:</strong>
+                    </div>
+                    <div class="form-group bg-light pt-2 pb-2">
+                        <strong>{{ user.state }}</strong>
+                    </div>
+                </div>
+                <div class="mb-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

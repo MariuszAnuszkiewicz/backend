@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+{% block title %}Users{% endblock %}
+{% block body %}
+<div class="container">
+    {{ include('./messages/success.html.twig') }}
+    {{ include('./messages/warning.html.twig') }}
+    {{ include('./messages/validate/errors.html.twig') }}
+    <div class="row justify-content-center">
+        <div class="col-3">
+            {{ include('./user/forms/user.html.twig') }}
+        </div>
+        {% if users is not empty %}
+        <div class="card-body"><h5><strong class="header-text">List of Users</strong></h5></div>
+        <table class="table table-striped">
+            <thead class="bg-dark">
+                <tr>
+                    <th class="text-center text-white">id</th>
+                    <th class="text-center text-white">Login</th>
+                    <th class="text-center text-white">State</th>
+                    <th class="text-center text-white">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td class="text-center"><p class="pt-2 fw-bolder">{{ user.id }}</p></td>
+                    <td class="text-center"><p class="pt-2">{{ user.login }}</p></td>
+                    <td class="text-center"><p class="pt-2">{{ user.state }}</p></td>
+                    <td class="text-center">
+                        <form method="GET" action="{{ path('user-show', {'id': user.id}) }}" class="d-inline-flex pt-1">
+                            <button class="btn btn-info"><i class="fas fa-eye"></i></button>
+                        </form>
+                        <form method="POST" action="{{ path('user-edit', {'id': user.id}) }}" class="d-inline-flex pt-1">
+                            <button class="btn btn-success"><i class="fas fa-edit"></i></button>
+                        </form>
+                    </td>
+                </tr>
+               {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+    <style>
+        .style-info {
+            display: block;
+            position: absolute;
+            top: 295px;
+            left: 41.7%;
+            background-color: rgba(60, 204, 102, 0.3);
+            width: 350px;
+            height: 35px;
+            text-align: center;
+            border-radius: 7px;
+        }
+
+        .style-info p {
+            position: relative;
+            padding-top: 5px;
+            padding-right: 10px;
+        }
+
+        .style-warning {
+            display: block;
+            position: absolute;
+            top: 295px;
+            left: 41.7%;
+            background-color: rgba(245, 34, 70, 0.3);
+            width: 350px;
+            height: 35px;
+            text-align: center;
+            border-radius: 7px;
+        }
+
+        .style-warning p {
+            position: relative;
+            padding-top: 5px;
+            padding-right: 25px;
+        }
+
+        .style-errors {
+            display: block;
+            position: absolute;
+            top: 295px;
+            left: 41.7%;
+            background-color: rgba(245, 34, 70, 0.3);
+            width: 350px;
+            height: 35px;
+            text-align: center;
+            border-radius: 7px;
+            list-style-type: none;
+        }
+
+        .style-errors li {
+            position: relative;
+            padding-top: 5px;
+            padding-right: 25px;
+        }
+    </style>
+{% endblock %}
