@@ -22,22 +22,31 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "name field can't be empty")
+     * @Assert\Length(
+     *     min=3,
+     *     max=255,
+     *     minMessage="The name must be at least 3 characters long",
+     *     maxMessage="The name cannot be longer than 255 characters"
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(message = "info field can't be empty")
      */
     private $info;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\NotNull()
      */
     private $public_date;
 
     /**
      * @ORM\Column(type="decimal", precision=7, scale=2)
-     * @Assert\NotBlank(message="The fields 'From' and 'To' can't be empty")
+     * @Assert\NotBlank(message="price field can't be empty")
      *
      */
     private $price;

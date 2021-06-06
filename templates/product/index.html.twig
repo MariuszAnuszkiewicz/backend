@@ -3,9 +3,10 @@
 {% block body %}
 <div class="container">
     {{ include('./messages/success.html.twig') }}
-    {{ include('./messages/errors.html.twig') }}
+    {{ include('./messages/warning.html.twig') }}
+    {{ include('./messages/validate/errors.html.twig') }}
     <div class="row justify-content-center">
-        <div class="col-3">
+        <div class="col-2">
             {{ include('./product/forms/product.html.twig') }}
         </div>
         {% if products is not empty %}
@@ -24,22 +25,18 @@
             <tbody>
             {% for product in products %}
                 <tr>
-                    <td class="text-center"><p class="pt-3 fw-bolder">{{ product.id }}</p></td>
-                    <td class="text-center"><p class="pt-3">{{ product.name|length > 30 ? product.name|slice(0, 30) ~ ' ... ' : product.name }}</p></td>
-                    <td class="text-center"><p class="pt-3">{{ product.info|length > 50 ? product.info|slice(0, 50) ~ ' ... ' : product.info }}</p></td>
-                    <td class="text-center"><p class="pt-3">{{ product.getPublicDate|format_datetime('short', 'none') }}</p></td>
-                    <td class="text-center"><p class="pt-3 text-danger fw-bolder">{{ product.price|number_format(2) ~ ' zł' }}</p></td>
+                    <td class="text-center"><p class="pt-2 fw-bolder">{{ product.id }}</p></td>
+                    <td class="text-center"><p class="pt-2">{{ product.name|length > 30 ? product.name|slice(0, 30) ~ ' ... ' : product.name }}</p></td>
+                    <td class="text-center"><p class="pt-2">{{ product.info|length > 50 ? product.info|slice(0, 50) ~ ' ... ' : product.info }}</p></td>
+                    <td class="text-center"><p class="pt-2">{{ product.getPublicDate|format_datetime('short', 'none') }}</p></td>
+                    <td class="text-center"><p class="pt-2 text-danger fw-bolder">{{ product.price|number_format(2) ~ ' zł' }}</p></td>
                     <td class="text-center">
-                        <div class="col-4 d-inline-flex pt-2">
-                            <form method="GET" action="{{ path('product-show', {'id': product.id}) }}">
-                                <button class="btn btn-info"><i class="fas fa-eye"></i></button>
-                            </form>
-                        </div>
-                        <div class="col-4 d-inline-flex pt-2">
-                            <form method="POST" action="{{ path('product-edit', {'id': product.id}) }}">
-                                <button class="btn btn-success"><i class="fas fa-edit"></i></button>
-                            </form>
-                        </div>
+                        <form method="GET" action="{{ path('product-show', {'id': product.id}) }}" class="d-inline-flex pt-1">
+                            <button class="btn btn-info"><i class="fas fa-eye"></i></button>
+                        </form>
+                        <form method="POST" action="{{ path('product-edit', {'id': product.id}) }}" class="d-inline-flex pt-1">
+                            <button class="btn btn-success"><i class="fas fa-edit"></i></button>
+                        </form>
                     </td>
                 </tr>
             {% endfor %}
@@ -78,10 +75,28 @@
             height: 35px;
             text-align: center;
             border-radius: 7px;
+        }
+
+        .style-warning p {
+            position: relative;
+            padding-top: 5px;
+            padding-right: 25px;
+        }
+
+        .style-errors {
+            display: block;
+            position: absolute;
+            top: 295px;
+            left: 41.7%;
+            background-color: rgba(245, 34, 70, 0.3);
+            width: 350px;
+            height: 35px;
+            text-align: center;
+            border-radius: 7px;
             list-style-type: none;
         }
 
-        .style-warning li {
+        .style-errors li {
             position: relative;
             padding-top: 5px;
             padding-right: 25px;
