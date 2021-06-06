@@ -4,6 +4,7 @@ namespace App\Controller\Product;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,13 +16,23 @@ use App\Form\Product\ProductFiltrType;
 
 class ProductController extends AbstractController
 {
+
     /**
-     * @Route("/products", name="products-list")
+     * @var PaginatorInterface
+     */
+    private $paginator;
+
+    public function __construct(PaginatorInterface $paginator) {
+        $this->paginator = $paginator;
+    }
+
+    /**
+     * @Route("/product/list", name="products-list")
      * @param Request $request
      * @param ProductRepository $productRepository
      * @return Response
      */
-    public function index(Request $request, ProductRepository $productRepository): Response
+    public function list(Request $request, ProductRepository $productRepository): Response
     {
         $form = $this->createForm(ProductFiltrType::class);
         $form->handleRequest($request);
@@ -29,8 +40,9 @@ class ProductController extends AbstractController
             $data = $form->getData();
             if (!empty($data['from']) && !empty($data['to'])) {
                 $products = $productRepository->getByPriceBetween($data['from'], $data['to']);
+                $products = $this->paginator->paginate($products, $request->query->getInt('page', 1), count($products));
                 try {
-                    if (!$products) {
+                    if (count($products->getItems()) < 1) {
                         throw new \Exception('Selected Product not find');
                     }
                 } catch (\Exception $e) {
@@ -44,6 +56,7 @@ class ProductController extends AbstractController
         }
 
         $products = $productRepository->getAll();
+        $products = $this->paginator->paginate($products, $request->query->getInt('page', 1), $productRepository::PER_PAGE);
         return $this->render('product/index.html.twig', [
             'products' =>  !empty($products) ? $products : '',
             'form' => $form->createView(),
