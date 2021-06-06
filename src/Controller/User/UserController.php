@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,12 +16,21 @@ use App\Form\User\UserFiltrType;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/users", name="users-list")
+     * @var PaginatorInterface
+     */
+    private $paginator;
+
+    public function __construct(PaginatorInterface $paginator) {
+        $this->paginator = $paginator;
+    }
+
+    /**
+     * @Route("/user/list/", name="users-list")
      * @param Request $request
      * @param UserRepository $userRepository
      * @return Response
      */
-    public function index(Request $request, UserRepository $userRepository): Response
+    public function list(Request $request, UserRepository $userRepository): Response
     {
         $form = $this->createForm(UserFiltrType::class);
         $form->handleRequest($request);
@@ -28,8 +38,9 @@ class UserController extends AbstractController
             $data = $form->getData();
             if (!empty($data['login']) || !empty($data['state'])) {
                 $users = $userRepository->getByLoginOrStateLikePattern($data['login'], $data['state']);
+                $users = $this->paginator->paginate($users, $request->query->getInt('page', 1), $userRepository::PER_PAGE);
                 try {
-                    if (!$users) {
+                    if (count($users->getItems()) < 1) {
                         throw new \Exception('Selected User not find');
                     }
                 } catch (\Exception $e) {
@@ -42,6 +53,7 @@ class UserController extends AbstractController
             }
         }
         $users = $userRepository->getAll();
+        $users = $this->paginator->paginate($users, $request->query->getInt('page', 1), $userRepository::PER_PAGE);
         return $this->render('user/index.html.twig', [
             'users' => !empty($users) ? $users : '',
             'form' => $form->createView(),

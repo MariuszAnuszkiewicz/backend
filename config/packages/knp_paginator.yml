@@ -1,0 +1,33 @@
+
+  Bardzo często pierwsza aplikacją, na której szlifujemy swoje umiejętności jest blog. Nawet samo Symfony dało możliwość jedną komendą postawienia bloga, który przedstawia rekomendowaną strukturę. Teraz nastały czasy, że wszyscy scrollują, Facebook, Instagram itd. więc paginacja odeszła do lamusa. Czyżby? Tak na prawdę przybrała inną postać. Nieustanne scrollowanie też jest swego rodzaju dostarczaniem danych paczkami, przecież wchodząc na Facebooka nie dostajesz od razu wczytanej całej swojej tablicy, a jedynie fragment. Dzisiaj pokaże Ci jedno wielu rozwiązań implementacji i czym jest sama paginacja w Symfony.
+
+  Dla tego posta postawiłam właśnie czystą aplikacje ze szkieletu Symfony. Wystarczyło tylko odpalić:
+
+    composer create-project symfony/skeleton blog
+    Oczywiście doinstalować jeszcze pare innych paczek jak doctrine czy twig.
+
+    Czym jest paginacja?
+    Paginacja to nic innego jak stronicowanie/porcjowanie treści. Bardzo dobrze wpływa na wydajność strony internetowej, ponieważ nie renderuje się od razu wszystkich rekordów, a tylko część przez co czas oczekiwania jest znacznie krótszy. Jest także dobrym rozwiązaniem pod kątem SEO, ponieważ każda ze stron ma osobny adres i pozycjonuje się oddzielnie. Jednak z meta danymi trzeba uważać żeby nie wygenerować stron z takim samy opisem meta i innymi parametrami.
+
+    KNP Paginator Bundle
+    Po co utrudniać sobie życie i wymyślać koło na nowo. Moim zdaniem ważne jest aby umieć sobie ułatwiać życie gotowymi paczkami jednocześnie nie podchodząc do nich bezkrytycznie.
+
+    Do paginacji przyda się nam bundle od Knp Labs, instalacja jak zwykle bardzo prosta. Co ważne ten bundle wspiera SEO więc nie musimy się matrwić o to co pisałam powyżej.
+
+    composer require knplabs/knp-paginator-bundle
+    Następnie musimy do skonfigurować, w tym celu należy stworzyć plik config/packages/knp_paginator.yml z treścią
+
+  knp_paginator:
+    page_range: 3                 # number of links showed in the pagination menu (e.g: you have 10 pages, a page_range of 3, on the 5th page you'll see links to page 4, 5, 6)
+    default_options:
+      page_name: page             # page query parameter name
+      sort_field_name: sort       # sort field query parameter name
+      sort_direction_name: direction  # sort direction query parameter name
+      distinct: true              # ensure distinct results, useful when ORM queries are using GROUP BY statements
+      filter_field_name: filterField  # filter field query parameter name
+      filter_value_name: filterValue  # filter value query parameter name
+    template:
+      pagination: '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig'     # sliding pagination controls template
+      sortable: '@KnpPaginator/Pagination/sortable_link.html.twig' # sort link template
+      filtration: '@KnpPaginator/Pagination/filtration.html.twig'  # filters template
+
