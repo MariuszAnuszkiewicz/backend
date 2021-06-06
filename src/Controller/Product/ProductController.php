@@ -27,7 +27,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/product/list", name="products-list")
+     * @Route("/product/list/", name="products-list")
      * @param Request $request
      * @param ProductRepository $productRepository
      * @return Response
@@ -128,13 +128,12 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted()) {
             $submittedToken = $request->request->get('token');
-            if ($this->isCsrfTokenValid('product-item', $submittedToken)) {
+            if ($this->isCsrfTokenValid('product_item', $submittedToken)) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->flush();
                 return $this->redirectToRoute('products-list');
             }
         }
-
         return $this->render('product/edit.html.twig', [
             'form' => $form->createView()
         ]);
