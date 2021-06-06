@@ -30,6 +30,7 @@ class ProductType extends AbstractType
                 'attr' => ['class' => 'mb-2', 'rows' => '8']
             ])
             ->add('public_date', DateType::class, [
+                'mapped' => true,
                 'required' => false,
                 'label_attr' => ['class' => 'mb-2'],
                 'attr' => ['class' => 'col-md-3 mb-2'],
