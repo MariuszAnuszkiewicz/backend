@@ -1,6 +1,6 @@
 <div class="col-md-12 col mt-3">
     {{ form_start(form, {'method': 'POST'}) }}
-        <input type="hidden" name="token" value="{{ csrf_token('product-item') }}"/>
+        <input type="hidden" name="token" value="{{ csrf_token('product_item') }}"/>
         <label for="product" class="control-label"><strong class="text-black-50">{{ form_label(form) }}</strong></label>
         <div class="form-control bg-light">
             <div class="mb-3">

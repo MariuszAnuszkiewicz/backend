@@ -19,29 +19,26 @@ class ProductController extends AbstractController
      * @Route("/products", name="products-list")
      * @param Request $request
      * @param ProductRepository $productRepository
-     * @param ValidatorInterface $validator
      * @return Response
      */
-    public function index(Request $request, ProductRepository $productRepository, ValidatorInterface $validator): Response
+    public function index(Request $request, ProductRepository $productRepository): Response
     {
-        $product = new Product();
         $form = $this->createForm(ProductFiltrType::class);
         $form->handleRequest($request);
-        $errors = $validator->validate($product);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $data = $form->getData();
             if (!empty($data['from']) && !empty($data['to'])) {
                 $products = $productRepository->getByPriceBetween($data['from'], $data['to']);
+                try {
+                    if (!$products) {
+                        throw new \Exception('Selected Product not find');
+                    }
+                } catch (\Exception $e) {
+                    $this->addFlash('warning', $e->getMessage());
+                }
                 return $this->render('product/index.html.twig', [
-                    'products' =>  !empty($products) ? $products : '',
+                    'products' => $products,
                     'form' => $form->createView(),
-                ]);
-            }
-            if (count($errors) > 0) {
-                return $this->render('product/index.html.twig', [
-                    'products' => !empty($products) ? $products : '',
-                    'form' => $form->createView(),
-                    'errors' => $errors,
                 ]);
             }
         }
@@ -58,20 +55,27 @@ class ProductController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function create(Request $request): Response
+    public function create(Request $request, ValidatorInterface $validator): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
-            if ($form->isSubmitted()) {
+        $errors = $validator->validate($product);
+            if ($form->isSubmitted() && $form->isValid()) {
                 $submittedToken = $request->request->get('token');
-                if ($this->isCsrfTokenValid('product-item', $submittedToken)) {
+                if ($this->isCsrfTokenValid('product_item', $submittedToken)) {
                     $product = $form->getData();
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($product);
                     $entityManager->flush();
                     $this->addFlash('success', 'Product was add successfully.');
                     return $this->redirectToRoute('products-list');
+                }
+                if (count($errors) > 0) {
+                    return $this->render('product/create.html.twig', [
+                        'form' => $form->createView(),
+                        'errors' => $errors,
+                    ]);
                 }
             }
 

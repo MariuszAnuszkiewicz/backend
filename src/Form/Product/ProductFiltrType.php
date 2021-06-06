@@ -22,7 +22,6 @@ class ProductFiltrType extends AbstractType
     {
         $builder
             ->add('from', IntegerType::class, [
-                'mapped' => true,
                 'required' => false,
                 'label_attr' => ['class' => 'mb-1'],
                 'attr' => [
@@ -31,7 +30,6 @@ class ProductFiltrType extends AbstractType
                 ]
             ])
             ->add('to', IntegerType::class, [
-                'mapped' => true,
                 'required' => false,
                 'label_attr' => ['class' => 'mb-1'],
                 'attr' => [
