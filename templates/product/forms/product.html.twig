@@ -1,4 +1,4 @@
-{{ form_start(form, {'method': 'POST'}) }}
+{{ form_start(form) }}
     <input type="hidden" name="token" value="{{ csrf_token('product_item') }}"/>
     <label for="product" class="control-label"><strong class="text-black-50">{{ form_label(form) }}</strong></label>
     <div class="form-control bg-light">
