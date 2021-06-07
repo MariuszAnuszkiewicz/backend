@@ -57,7 +57,7 @@ class User
      * @ORM\JoinTable(
      *     name="user_product",
      *     joinColumns={
-     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id" onDelete="CASCADE")
+     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      *     },
      *     inverseJoinColumns={
      *          @ORM\JoinColumn(name="product_id", referencedColumnName="id")
@@ -111,7 +111,7 @@ class User
     public function addProduct(Product\Product $product): self
     {
         if ($this->products->contains($product)) {
-            return;
+            return $this;
         }
         $this->products[] = $product;
     }
