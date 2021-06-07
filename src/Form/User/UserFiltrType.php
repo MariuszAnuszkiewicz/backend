@@ -14,6 +14,7 @@ class UserFiltrType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->setMethod('GET')
             ->add('login', TextType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'mb-2'],
