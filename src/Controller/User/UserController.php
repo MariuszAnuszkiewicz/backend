@@ -25,7 +25,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/list/", name="users-list")
+     * @Route("/user/list/", name="users-list", methods={"GET","POST"})
      * @param Request $request
      * @param UserRepository $userRepository
      * @return Response
@@ -46,10 +46,12 @@ class UserController extends AbstractController
                 } catch (\Exception $e) {
                     $this->addFlash('warning', $e->getMessage());
                 }
-                return $this->render('user/index.html.twig', [
-                    'users' => $users,
-                    'form' => $form->createView(),
-                ]);
+                if (count($users->getItems()) > 0) {
+                    return $this->render('user/index.html.twig', [
+                        'users' => $users,
+                        'form' => $form->createView(),
+                    ]);
+                }
             }
         }
         $users = $userRepository->getAll();
