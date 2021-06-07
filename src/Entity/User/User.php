@@ -8,8 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table("users")
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User
 {
@@ -52,6 +52,25 @@ class User
      */
     private $state;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Product\Product")
+     * @ORM\JoinTable(
+     *     name="user_product",
+     *     joinColumns={
+     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id" onDelete="CASCADE")
+     *     },
+     *     inverseJoinColumns={
+     *          @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    private $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,5 +98,26 @@ class User
         $this->state = $state;
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getProducts(): ArrayCollection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product\Product $product): self
+    {
+        if ($this->products->contains($product)) {
+            return;
+        }
+        $this->products[] = $product;
+    }
+
+    public function removeProduct(Product\Product $product): bool
+    {
+        return $this->products->removeElement($product);
     }
 }
