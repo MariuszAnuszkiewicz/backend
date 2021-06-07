@@ -21,6 +21,7 @@ class ProductFiltrType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->setMethod('GET')
             ->add('from', IntegerType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'mb-1'],

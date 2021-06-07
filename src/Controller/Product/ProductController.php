@@ -48,10 +48,12 @@ class ProductController extends AbstractController
                 } catch (\Exception $e) {
                     $this->addFlash('warning', $e->getMessage());
                 }
-                return $this->render('product/index.html.twig', [
-                    'products' => $products,
-                    'form' => $form->createView(),
-                ]);
+                if (count($products->getItems()) > 0) {
+                    return $this->render('product/index.html.twig', [
+                        'products' => $products,
+                        'form' => $form->createView(),
+                    ]);
+                }
             }
         }
 
