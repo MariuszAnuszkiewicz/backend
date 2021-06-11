@@ -9,12 +9,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\User\UserRepository;
+use App\Repository\Product\ProductRepository;
+use App\Controller\User\Helpers\UserTrait;
+use App\Entity\Product\Product;
 use App\Entity\User\User;
 use App\Form\User\UserType;
 use App\Form\User\UserFiltrType;
 
 class UserController extends AbstractController
 {
+    use UserTrait;
+
     /**
      * @var PaginatorInterface
      */
@@ -136,6 +141,72 @@ class UserController extends AbstractController
         }
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/user/set-product", name="set-product")
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @param ProductRepository $productRepository
+     * @return Response
+     */
+    public function setProduct(Request $request, UserRepository $userRepository, ProductRepository $productRepository): Response
+    {
+        $users = $this->paginator->paginate($userRepository->getAll(), $request->query->getInt('page', 1), 8);
+        $products = $productRepository->getAll();
+        try {
+            if (count($users->getItems()) < 1) {
+                throw new \Exception('Any Users not exists');
+            }
+            if (!$products) {
+                throw new \Exception('Any Products not exists');
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('warning', $e->getMessage());
+        }
+
+        if ($request->isMethod('post')) {
+            $setUsers = $request->request->get('set_user');
+            $setProducts = $request->request->get('set_product');
+            if ($setUsers != null && $setProducts != null) {
+                $this->addProductsForUser($setProducts, $setUsers);
+            }
+            try {
+                if ($setUsers == null && $setProducts == null) {
+                    throw new \Exception('You should choose users and products');
+                }
+            } catch (\Exception $e) {
+                $this->addFlash('warning', $e->getMessage());
+            }
+        }
+
+        return $this->render('user/like_product.html.twig', [
+            'users' => $users,
+            'products' => $products,
+        ]);
+    }
+
+    /**
+     * @Route("/user/liked-products", name="liked-products")
+     * @param UserRepository $userRepository
+     * @return Response
+     */
+    public function listLiked(UserRepository $userRepository): Response
+    {
+        foreach ($userRepository->getUsersProducts() as $userProduct) {
+            $userIds[] = $userProduct['user_id'];
+        }
+        try {
+            if (empty($userIds)) {
+                throw new \Exception("There're haven't any products liked by user");
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('warning', $e->getMessage());
+        }
+        $usersById = $this->getDoctrine()->getManager()->getRepository(User::class)->findBy(['id' => $userIds], ['login' => 'ASC']);
+        return $this->render('user/list_of_liked.html.twig', [
+            'users' => $usersById
         ]);
     }
 }
