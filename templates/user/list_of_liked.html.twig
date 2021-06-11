@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+{% block title %}List of Liked Products{% endblock %}
+{% block body %}
+    <div class="container">
+    {{ include('./messages/warning.html.twig') }}
+        <div class="row justify-content-center">
+            <div class="card-body"><h5><strong class="header-text">List of Liked Products</strong></h5></div>
+            {% if users is not empty %}
+            <table class="table table-striped">
+                <thead class="bg-dark">
+                    <tr>
+                        <th class="text-center text-white">User Id</th>
+                        <th class="text-center text-white">User Login</th>
+                        <th class="text-center text-white">User State</th>
+                        <th class="text-center text-white">Product Id</th>
+                        <th class="text-center text-white">Product Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    {% for user_product in user.getProducts %}
+                    <tr>
+                        <td class="text-center"><p class="pt-2">{{ user.id }}</p></td>
+                        <td class="text-center"><p class="pt-2">{{ user.login }}</p></td>
+                        <td class="text-center"><p class="pt-2">{{ user.state }}</p></td>
+                        <td class="text-center"><p class="pt-2">{{ user_product.getId }}</p></td>
+                        <td class="text-center"><p class="pt-2">{{ user_product.getName }}</p></td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+    <style>
+        .style-warning {
+            display: block;
+            position: absolute;
+            top: 25px;
+            left: 41.7%;
+            background-color: rgba(245, 34, 70, 0.3);
+            width: 350px;
+            height: 35px;
+            text-align: center;
+            border-radius: 7px;
+        }
+
+        .style-warning p {
+            position: relative;
+            padding-top: 5px;
+            padding-right: 25px;
+        }
+    </style>
+{% endblock %}

@@ -5,7 +5,9 @@ namespace App\Entity\User;
 use App\Repository\User\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Product\Product;
 
 /**
  * @ORM\Table("users")
@@ -100,23 +102,20 @@ class User
         return $this;
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getProducts(): ArrayCollection
+    public function getProducts(): Collection
     {
         return $this->products;
     }
 
-    public function addProduct(Product\Product $product): self
+    public function addProduct(Product $product)
     {
         if ($this->products->contains($product)) {
-            return $this;
+            return;
         }
         $this->products[] = $product;
     }
 
-    public function removeProduct(Product\Product $product): bool
+    public function removeProduct(Product $product): bool
     {
         return $this->products->removeElement($product);
     }

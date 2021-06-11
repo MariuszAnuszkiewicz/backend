@@ -5,6 +5,7 @@ namespace App\Entity\Product;
 use App\Repository\Product\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -51,11 +52,24 @@ class Product
      */
     private $price;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User\User")
+     * @ORM\JoinTable(
+     *     name="user_product",
+     *     joinColumns={
+     *          @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    private $users;
 
-//    public function __construct()
-//    {
-//        $this->persons = new ArrayCollection();
-//    }
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -108,5 +122,10 @@ class Product
         $this->price = $price;
 
         return $this;
+    }
+
+    public function getUsers(): Collection
+    {
+        return $this->users;
     }
 }

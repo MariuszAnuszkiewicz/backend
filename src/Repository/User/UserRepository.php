@@ -141,4 +141,16 @@ class UserRepository extends ServiceEntityRepository
             return $query->getResult();
         }
     }
+
+    /**
+     * @return array|array[]
+     */
+    public function getUsersProducts(): array
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT * FROM user_product';
+        $stmt = $connection->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }

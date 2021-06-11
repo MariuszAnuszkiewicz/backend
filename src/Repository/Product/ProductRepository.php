@@ -122,5 +122,4 @@ class ProductRepository extends ServiceEntityRepository
         $query->setParameter(2, $to);
         return $query->getResult();
     }
-
 }
